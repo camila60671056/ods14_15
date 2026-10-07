@@ -1,14 +1,201 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
+<html lang="pt-BR">
+  <head>
+    <!-- Metadados essenciais do documento -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="EcoGuard — Animais em extinção, ODS 14 e ODS 15." />
+    <title>EcoGuard | Início</title>
 
-    </title>
-</head>
-<body>
-    <h1>lavinia</h1>l
-</body>
-</html
- 
+    <!-- Carregamento das fontes e estilos globais -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <!-- Barra de progresso visual da página -->
+    <div class="progress" id="progress"></div>
+
+    <!-- Cabeçalho da página com navegação principal -->
+    <header class="header" id="inicio">
+      <a class="logo" href="index.html" aria-label="EcoGuard - início">
+        <span class="logo-mark">◉</span>
+        <span>Eco<span>Guard</span></span>
+      </a>
+
+      <nav class="nav" aria-label="Navegação principal">
+        <a href="index.html">Início</a>
+        <a href="especies.html">Espécies</a>
+        <a href="mapa.html">Mapa</a>
+        <a href="jogo.html">Jogo</a>
+        <a href="acoes.html">Ações</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="icon-btn" id="themeToggle" aria-label="Alternar tema">☾</button>
+        <button class="icon-btn" id="accessibilityToggle" aria-label="Abrir acessibilidade">♿</button>
+        <button class="menu-btn" id="menuBtn" aria-label="Abrir menu">☰</button>
+      </div>
+    </header>
+
+    <!-- Painel de acessibilidade para fonte, contraste e leitura de tela -->
+    <aside class="access-panel" id="accessPanel" aria-label="Opções de acessibilidade">
+      <h3>Acessibilidade</h3>
+      <button id="fontPlus">A+ Aumentar fonte</button>
+      <button id="fontMinus">A− Diminuir fonte</button>
+      <button id="contrastToggle">◐ Alto contraste</button>
+      <button id="readToggle">🔊 Ler conteúdo</button>
+      <button id="resetAccess">↺ Restaurar</button>
+    </aside>
+
+    <main>
+      <!-- Hero principal: chamada de impacto inicial -->
+      <section class="hero">
+        <div class="hero-glow"></div>
+
+        <div class="hero-copy reveal">
+          <p class="eyebrow">ODS 14 · ODS 15</p>
+          <h1>
+            Vidas<br />
+            <em>em perigo.</em>
+          </h1>
+          <p class="hero-text">
+            Explore espécies ameaçadas, descubra onde elas vivem e entenda como pequenas
+            escolhas podem ajudar a proteger a biodiversidade.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="especies.html">Explorar espécies <span>→</span></a>
+            <a class="btn btn-ghost" href="mapa.html">Abrir o mapa</a>
+          </div>
+
+          <div class="hero-stats">
+            <div><strong>14</strong><span>Vida na água</span></div>
+            <div><strong>15</strong><span>Vida terrestre</span></div>
+            <div><strong>∞</strong><span>Vidas para proteger</span></div>
+          </div>
+        </div>
+
+        <div class="hero-art reveal">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="planet">
+            <div class="planet-land land-a"></div>
+            <div class="planet-land land-b"></div>
+            <div class="planet-land land-c"></div>
+            <div class="planet-land land-d"></div>
+            <span class="planet-dot dot-a"></span>
+            <span class="planet-dot dot-b"></span>
+            <span class="planet-dot dot-c"></span>
+          </div>
+          <div class="floating-card fc-one">🌊 <span>ODS 14<br /><b>Vida na água</b></span></div>
+          <div class="floating-card fc-two">🌿 <span>ODS 15<br /><b>Vida terrestre</b></span></div>
+        </div>
+      </section>
+
+      <!-- Seção explicativa sobre a importância da biodiversidade -->
+      <section class="intro section">
+        <div class="section-heading reveal">
+          <p class="eyebrow">POR QUE ISSO IMPORTA?</p>
+          <h2>A extinção começa muito antes do último animal desaparecer.</h2>
+        </div>
+
+        <div class="intro-grid">
+          <p class="lead reveal">
+            A biodiversidade sustenta os ecossistemas dos quais dependemos. Quando habitats
+            são destruídos, animais são caçados ou ambientes são contaminados, populações
+            podem diminuir até chegar ao risco de extinção.
+          </p>
+
+          <div class="quote-card reveal">
+            <span>“</span>
+            <p>Proteger hoje é evitar o impossível amanhã.</p>
+            <small>— EcoGuard</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- Lista das principais ameaças à fauna e flora -->
+      <section class="threats section">
+        <div class="section-heading compact reveal">
+          <p class="eyebrow">AMEAÇAS</p>
+          <h2>O que coloca essas vidas em risco?</h2>
+        </div>
+
+        <div class="threat-grid">
+          <article class="threat-card reveal">
+            <div>🪓</div>
+            <h3>Destruição dos habitats</h3>
+            <p>A perda e fragmentação de ambientes naturais reduzem espaço e recursos.</p>
+          </article>
+
+          <article class="threat-card reveal">
+            <div>🎯</div>
+            <h3>Caça ilegal</h3>
+            <p>A retirada de animais da natureza pode reduzir populações inteiras.</p>
+          </article>
+
+          <article class="threat-card reveal">
+            <div>🐾</div>
+            <h3>Tráfico de animais</h3>
+            <p>O comércio ilegal ameaça espécies e causa sofrimento.</p>
+          </article>
+
+          <article class="threat-card reveal">
+            <div>🌡️</div>
+            <h3>Mudanças climáticas</h3>
+            <p>Alterações de temperatura e ambientes afetam a sobrevivência.</p>
+          </article>
+
+          <article class="threat-card reveal">
+            <div>🗑️</div>
+            <h3>Poluição</h3>
+            <p>Resíduos e contaminantes prejudicam habitats terrestres e marinhos.</p>
+          </article>
+
+          <article class="threat-card reveal">
+            <div>🎣</div>
+            <h3>Pesca predatória</h3>
+            <p>A captura excessiva pode ameaçar espécies e desequilibrar ecossistemas.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Chamada para ação final do site -->
+      <section class="closing section">
+        <div class="closing-inner reveal">
+          <p class="eyebrow">ODS 14 · ODS 15</p>
+          <h2>
+            O planeta não precisa de espectadores.<br />
+            <em>Precisa de guardiões.</em>
+          </h2>
+          <a href="jogo.html" class="btn btn-primary">Testar meus conhecimentos →</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- Rodapé com identificação do projeto -->
+    <footer class="footer">
+      <div>
+        <a class="logo" href="index.html">
+          <span class="logo-mark">◉</span>
+          <span>Eco<span>Guard</span></span>
+        </a>
+        <p>Animais em extinção: vidas em perigo.</p>
+      </div>
+
+      <div class="footer-meta">
+        <span>Projeto Integrador · Frontend</span>
+        <span>ODS 14 · ODS 15</span>
+      </div>
+    </footer>
+
+    <!-- Script principal da interação do site -->
+    <script defer src="js/app.js"></script>
+  </body>
+</html>

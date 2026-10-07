@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <!-- Metadados do documento e estilos de página -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="EcoGuard — Animais em extinção, ODS 14 e ODS 15." />
+    <title>EcoGuard | Espécies</title>
+
+    <!-- Importação das fontes e estilos globais -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <!-- Indicador de progresso da página -->
+    <div class="progress" id="progress"></div>
+
+    <!-- Cabeçalho com navegação e ações rápidas -->
+    <header class="header" id="inicio">
+      <a class="logo" href="index.html" aria-label="EcoGuard - início">
+        <span class="logo-mark">◉</span>
+        <span>Eco<span>Guard</span></span>
+      </a>
+
+      <nav class="nav" aria-label="Navegação principal">
+        <a href="index.html">Início</a>
+        <a href="especies.html">Espécies</a>
+        <a href="mapa.html">Mapa</a>
+        <a href="jogo.html">Jogo</a>
+        <a href="acoes.html">Ações</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="icon-btn" id="themeToggle" aria-label="Alternar tema">☾</button>
+        <button class="icon-btn" id="accessibilityToggle" aria-label="Abrir acessibilidade">♿</button>
+        <button class="menu-btn" id="menuBtn" aria-label="Abrir menu">☰</button>
+      </div>
+    </header>
+
+    <!-- Painel de acessibilidade do site -->
+    <aside class="access-panel" id="accessPanel" aria-label="Opções de acessibilidade">
+      <h3>Acessibilidade</h3>
+      <button id="fontPlus">A+ Aumentar fonte</button>
+      <button id="fontMinus">A− Diminuir fonte</button>
+      <button id="contrastToggle">◐ Alto contraste</button>
+      <button id="readToggle">🔊 Ler conteúdo</button>
+      <button id="resetAccess">↺ Restaurar</button>
+    </aside>
+
+    <main>
+      <!-- Hero da página de espécies -->
+      <section class="page-hero">
+        <p class="eyebrow">CATÁLOGO</p>
+        <h1>Conheça quem ainda podemos proteger.</h1>
+        <p>
+          Pesquise e filtre animais relacionados às ODS 14 e 15. Clique em uma espécie
+          para conhecer seu habitat, ameaças e formas de ajudar.
+        </p>
+      </section>
+
+      <!-- Conteúdo com filtros e listagem dinâmica de espécies -->
+      <section class="page-content">
+        <div class="filters">
+          <div class="search-box">
+            <span>⌕</span>
+            <input id="searchInput" type="search" placeholder="Pesquisar animal..." aria-label="Pesquisar animal" />
+          </div>
+
+          <div class="filter-buttons">
+            <button class="filter active" data-filter="todos">Todos</button>
+            <button class="filter" data-filter="14">🌊 ODS 14</button>
+            <button class="filter" data-filter="15">🌿 ODS 15</button>
+            <button class="filter" data-filter="extinto">⚫ Extintos</button>
+          </div>
+        </div>
+
+        <div class="species-grid" id="speciesGrid"></div>
+        <p class="empty-state" id="emptyState" hidden>Nenhuma espécie encontrada.</p>
+      </section>
+
+      <!-- Modal para detalhes da espécie selecionada -->
+      <dialog class="modal" id="animalModal">
+        <button class="modal-close" id="modalClose" aria-label="Fechar">×</button>
+        <div id="modalContent"></div>
+      </dialog>
+    </main>
+
+    <!-- Rodapé do projeto -->
+    <footer class="footer">
+      <div>
+        <a class="logo" href="index.html">
+          <span class="logo-mark">◉</span>
+          <span>Eco<span>Guard</span></span>
+        </a>
+        <p>Animais em extinção: vidas em perigo.</p>
+      </div>
+
+      <div class="footer-meta">
+        <span>Projeto Integrador · Frontend</span>
+        <span>ODS 14 · ODS 15</span>
+      </div>
+    </footer>
+
+    <!-- Script principal que alimenta filtros, modal e interatividade -->
+    <script defer src="js/app.js"></script>
+  </body>
+</html>
