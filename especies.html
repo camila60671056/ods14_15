@@ -14,8 +14,9 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap"
       rel="stylesheet"
     />
+    <!-- Estilos exclusivos desta página -->
     <link rel="stylesheet" href="style.css" />
-  </head>
+</head>
 
   <body>
     <!-- Indicador de progresso da página -->
@@ -49,7 +50,7 @@
       <button id="fontPlus">A+ Aumentar fonte</button>
       <button id="fontMinus">A− Diminuir fonte</button>
       <button id="contrastToggle">◐ Alto contraste</button>
-      <button id="readToggle">🔊 Ler conteúdo</button>
+      <button id="readToggle">Ler conteúdo</button>
       <button id="resetAccess">↺ Restaurar</button>
     </aside>
 
@@ -69,14 +70,14 @@
         <div class="filters">
           <div class="search-box">
             <span>⌕</span>
-            <input id="searchInput" type="search" placeholder="Pesquisar animal..." aria-label="Pesquisar animal" />
+            <input id="searchInput" type="search" placeholder="Pesquisar entre 20 animais..." aria-label="Pesquisar animal" />
           </div>
 
           <div class="filter-buttons">
             <button class="filter active" data-filter="todos">Todos</button>
-            <button class="filter" data-filter="14">🌊 ODS 14</button>
-            <button class="filter" data-filter="15">🌿 ODS 15</button>
-            <button class="filter" data-filter="extinto">⚫ Extintos</button>
+            <button class="filter" data-filter="14">ODS 14</button>
+            <button class="filter" data-filter="15">ODS 15</button>
+            <button class="filter" data-filter="extinto">Extintos</button>
           </div>
         </div>
 
@@ -108,6 +109,162 @@
     </footer>
 
     <!-- Script principal que alimenta filtros, modal e interatividade -->
-    <script defer src="js/app.js"></script>
-  </body>
+    <!-- JavaScript do site inserido diretamente no HTML para funcionar sem pasta js -->
+    
+      <!-- Lógica e interações exclusivas desta página -->
+    <script>
+/* EcoGuard — JavaScript da página: especies.
+   Comentários originais preservados; funções organizadas por seções. */
+(function(){
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const root=document.documentElement, store={
+ get(k,d){try{return localStorage.getItem(k)??d}catch(e){return d}},
+ set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+root.classList.add('js-ready');
+
+/* ---------- Dados ---------- */
+const SPECIES=[
+ {id:'animal-1',nome:'Baleia-azul',emoji:'🐋',ods:14,status:'ameacada',lat:25,lon:-45,regiao:'Oceanos Atlântico, Pacífico e Índico',habitat:'Águas oceânicas profundas.',ameacas:'Colisões com navios, ruído submarino e mudanças ambientais.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-2',nome:'Tartaruga-verde',emoji:'🐢',ods:14,status:'ameacada',lat:-8,lon:-35,regiao:'Águas tropicais e subtropicais',habitat:'Costas, recifes e pradarias marinhas.',ameacas:'Plástico, captura acidental e perda de praias de desova.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-3',nome:'Tubarão-martelo',emoji:'🦈',ods:14,status:'critica',lat:15,lon:-75,regiao:'Mares tropicais e temperados',habitat:'Águas costeiras e oceânicas.',ameacas:'Sobrepesca e captura pelas barbatanas.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-4',nome:'Tubarão-branco',emoji:'🦈',ods:14,status:'ameacada',lat:-30,lon:30,regiao:'Oceanos temperados',habitat:'Águas costeiras e oceânicas.',ameacas:'Pesca incidental e redução de presas.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-5',nome:'Raia-manta',emoji:'🐟',ods:14,status:'ameacada',lat:-12,lon:145,regiao:'Indo-Pacífico e Atlântico tropical',habitat:'Águas tropicais próximas a recifes.',ameacas:'Pesca direcionada, captura acidental e poluição.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-6',nome:'Dugongo',emoji:'🦭',ods:14,status:'ameacada',lat:15,lon:115,regiao:'Mar Vermelho e Indo-Pacífico',habitat:'Águas costeiras com pradarias marinhas.',ameacas:'Perda de pradarias, redes de pesca e colisões.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-7',nome:'Pinguim-de-Humboldt',emoji:'🐧',ods:14,status:'ameacada',lat:-25,lon:-78,regiao:'Costas do Peru e do Chile',habitat:'Ilhas e costas rochosas frias.',ameacas:'Mudanças climáticas, pesca e perturbação das colônias.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-8',nome:'Baleia-franca',emoji:'🐋',ods:14,status:'ameacada',lat:-40,lon:-55,regiao:'Atlântico Sul e outras águas do hemisfério sul',habitat:'Águas costeiras para reprodução.',ameacas:'Colisões com embarcações e emalhamento em redes.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-9',nome:'Vaquita',emoji:'🐬',ods:14,status:'critica',lat:31,lon:-114,regiao:'Alto Golfo da Califórnia, México',habitat:'Águas rasas do golfo.',ameacas:'Captura acidental em redes de pesca ilegais.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-10',nome:'Tartaruga-de-pente',emoji:'🐢',ods:14,status:'critica',lat:18,lon:-66,regiao:'Recifes tropicais do Caribe e Indo-Pacífico',habitat:'Recifes de coral e praias de nidificação.',ameacas:'Comércio ilegal do casco, perda de recifes e captura acidental.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-11',nome:'Onça-pintada',emoji:'🐆',ods:15,status:'ameacada',lat:-5,lon:-60,regiao:'América Central e América do Sul',habitat:'Florestas tropicais, Pantanal e outros ambientes.',ameacas:'Desmatamento, caça e conflitos com pecuaristas.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-12',nome:'Mico-leão-dourado',emoji:'🐒',ods:15,status:'ameacada',lat:-22.5,lon:-42.5,regiao:'Mata Atlântica do Rio de Janeiro, Brasil',habitat:'Florestas de baixada.',ameacas:'Fragmentação florestal e perda de habitat.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-13',nome:'Orangotango-de-Bornéu',emoji:'🦧',ods:15,status:'critica',lat:1,lon:114,regiao:'Ilha de Bornéu, Sudeste Asiático',habitat:'Florestas tropicais úmidas.',ameacas:'Desmatamento, incêndios e expansão agrícola.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-14',nome:'Elefante-africano',emoji:'🐘',ods:15,status:'ameacada',lat:1,lon:25,regiao:'África subsaariana',habitat:'Savanas, florestas e áreas de transição.',ameacas:'Perda de habitat e caça por marfim.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-15',nome:'Coala',emoji:'🐨',ods:15,status:'ameacada',lat:-25,lon:153,regiao:'Leste da Austrália',habitat:'Florestas de eucalipto.',ameacas:'Desmatamento, incêndios e ondas de calor.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-16',nome:'Rinoceronte-de-Java',emoji:'🦏',ods:15,status:'critica',lat:-7,lon:105,regiao:'Parque Nacional de Ujung Kulon, Indonésia',habitat:'Floresta tropical úmida.',ameacas:'População muito pequena e habitat restrito.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-17',nome:'Tigre-de-sumatra',emoji:'🐅',ods:15,status:'critica',lat:-1,lon:102,regiao:'Ilha de Sumatra, Indonésia',habitat:'Florestas tropicais.',ameacas:'Desmatamento, caça e fragmentação.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-18',nome:'Crocodilo-do-nilo',emoji:'🐊',ods:15,status:'ameacada',lat:-2,lon:32,regiao:'Rios e lagos da África subsaariana',habitat:'Rios, lagos e zonas úmidas.',ameacas:'Conflitos com pessoas e alterações de habitat em algumas áreas.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-19',nome:'Tilacino (extinto)',emoji:'🐺',ods:15,status:'extinto',lat:-42,lon:147,regiao:'Tasmânia, Austrália',habitat:'Florestas e campos abertos.',ameacas:'Foi levado à extinção principalmente pela caça intensiva e outros impactos humanos.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'},
+ {id:'animal-20',nome:'Urso-polar',emoji:'🐻\u200d❄️',ods:15,status:'ameacada',lat:78,lon:-40,regiao:'Região ártica',habitat:'Gelo marinho e costas do Ártico.',ameacas:'Aquecimento global e perda do gelo marinho.',ajuda:'Reduza a poluição e apoie iniciativas de conservação do habitat.'}
+];
+const ST={ameacada:'Ameaçada',critica:'Criticamente ameaçada',extinto:'Extinta'};
+const MK={ameacada:'threatened',critica:'critical',extinto:'extinct'};
+const normalize=t=>String(t).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- Detalhe (modal) ---------- */
+function openModal(s){
+ const m=$('#animalModal'); if(!m) return;
+ $('#modalContent').innerHTML=`<p class="eyebrow">ODS ${s.ods} · ${ST[s.status]}</p><h2>${esc(s.nome)}</h2><p><b>Região:</b> ${esc(s.regiao)}</p><h4>Habitat</h4><p>${esc(s.habitat)}</p><h4>Ameaças</h4><p>${esc(s.ameacas)}</p><h4>Como ajudar</h4><p>${esc(s.ajuda)}</p>`;
+ m.showModal?m.showModal():m.setAttribute('open','');
+}
+const mc=$('#modalClose'),md=$('#animalModal');
+if(mc&&md){mc.onclick=()=>md.close();md.addEventListener('click',e=>{if(e.target===md)md.close()})}
+
+/* ---------- Tema, menu, acessibilidade ---------- */
+const tt=$('#themeToggle');
+function setTheme(t){root.setAttribute('data-theme',t);if(tt)tt.textContent=t==='dark'?'☀':'☾';store.set('eg-theme',t)}
+setTheme(store.get('eg-theme',matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));
+if(tt)tt.onclick=()=>setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark');
+const mb=$('#menuBtn'),nav=$('.nav');
+if(mb&&nav)mb.onclick=()=>nav.classList.toggle('open');
+$$('.nav a').forEach(a=>{if(a.getAttribute('href')===location.pathname.split('/').pop()||(!location.pathname.split('/').pop()&&a.getAttribute('href')==='index.html'))a.classList.add('active')});
+const ap=$('#accessPanel');
+if($('#accessibilityToggle'))$('#accessibilityToggle').onclick=()=>ap.classList.toggle('open');
+let fs=+store.get('eg-fs',16);
+function applyFs(){fs=Math.min(24,Math.max(12,fs));root.style.setProperty('--fs',fs+'px');store.set('eg-fs',fs)}
+applyFs();
+const on=(id,f)=>{const e=$(id);if(e)e.onclick=f};
+on('#fontPlus',()=>{fs+=2;applyFs()});on('#fontMinus',()=>{fs-=2;applyFs()});
+if(store.get('eg-hc','0')==='1')root.classList.add('hc');
+on('#contrastToggle',()=>{store.set('eg-hc',root.classList.toggle('hc')?'1':'0')});
+on('#readToggle',()=>{
+ if(!('speechSynthesis' in window))return alert('Seu navegador não suporta leitura em voz alta.');
+ if(speechSynthesis.speaking){speechSynthesis.cancel();return}
+ const u=new SpeechSynthesisUtterance($('main').innerText);u.lang='pt-BR';speechSynthesis.speak(u)});
+on('#resetAccess',()=>{fs=16;applyFs();root.classList.remove('hc');store.set('eg-hc','0');if('speechSynthesis' in window)speechSynthesis.cancel()});
+
+/* ---------- Progresso e reveal ---------- */
+const pr=$('#progress');
+addEventListener('scroll',()=>{if(pr){const h=root.scrollHeight-innerHeight;pr.style.width=(h>0?scrollY/h*100:0)+'%'}},{passive:true});
+if('IntersectionObserver' in window){
+ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});
+ $$('.reveal').forEach(el=>io.observe(el));
+}else $$('.reveal').forEach(el=>el.classList.add('in'));
+
+/* ---------- Espécies ---------- */
+const grid=$('#speciesGrid');
+if(grid){
+ let filtro='todos',busca='';
+ const render=()=>{
+  const l=SPECIES.filter(s=>(filtro==='todos'||(filtro==='extinto'?s.status==='extinto':String(s.ods)===filtro))&&normalize([s.nome,s.regiao,s.habitat,s.ameacas].join(' ')).includes(normalize(busca)));
+  grid.innerHTML='';
+  l.forEach(s=>{const b=document.createElement('button');b.className='species-card';
+   b.innerHTML=`<h3>${esc(s.nome)}</h3><small>${esc(s.regiao)}</small><div><span class="tag">ODS ${s.ods}</span><span class="tag">${ST[s.status]}</span></div>`;
+   b.onclick=()=>openModal(s);grid.appendChild(b)});
+  $('#emptyState').hidden=l.length>0;
+ };
+ $('#searchInput').addEventListener('input',e=>{busca=e.target.value.trim().toLowerCase();render()});
+ $$('.filter').forEach(b=>b.onclick=()=>{$$('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');filtro=b.dataset.filter;render()});
+ render();
+}
+
+/* ---------- Globo ---------- */
+const globe=$('#globe');
+if(globe){
+ const box=$('#markers');let rotLon=-40,rotLat=0,zoom=1;
+ const rad=Math.PI/180;
+ const els=SPECIES.map(s=>{const b=document.createElement('button');b.className='marker '+MK[s.status];b.setAttribute('aria-label',s.nome);
+  b.onclick=()=>{showInfo(s);openModal(s)};box.appendChild(b);return b});
+ function draw(){
+  SPECIES.forEach((s,i)=>{
+   const la=s.lat*rad,lo=(s.lon-rotLon)*rad,p=rotLat*rad;
+   const x=Math.cos(la)*Math.sin(lo),y=Math.sin(la)*Math.cos(p)-Math.cos(la)*Math.cos(lo)*Math.sin(p),z=Math.sin(la)*Math.sin(p)+Math.cos(la)*Math.cos(lo)*Math.cos(p);
+   const b=els[i];b.style.display=z>0?'block':'none';
+   b.style.left=(50+x*45*zoom)+'%';b.style.top=(50-y*45*zoom)+'%';
+  });
+ }
+ function showInfo(s){$('#mapInfo').innerHTML=`<div class="map-info-icon">${s.emoji}</div><p class="eyebrow">ODS ${s.ods} · ${ST[s.status]}</p><h3>${esc(s.nome)}</h3><p>${esc(s.regiao)}</p><p style="margin-top:.6rem">${esc(s.habitat)}</p>`}
+ let drag=null;
+ globe.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY}});
+ addEventListener('pointerup',()=>drag=null);
+ addEventListener('pointermove',e=>{if(!drag)return;rotLon-=(e.clientX-drag.x)*.4;rotLat=Math.max(-60,Math.min(60,rotLat+(e.clientY-drag.y)*.3));drag={x:e.clientX,y:e.clientY};draw()});
+ const z=d=>{zoom=Math.max(.7,Math.min(1.6,zoom+d));draw()};
+ globe.addEventListener('wheel',e=>{e.preventDefault();z(e.deltaY<0?.1:-.1)},{passive:false});
+ on('#zoomIn',()=>z(.15));on('#zoomOut',()=>z(-.15));on('#resetGlobe',()=>{rotLon=-40;rotLat=0;zoom=1;draw()});
+ globe.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')rotLon-=10;if(e.key==='ArrowRight')rotLon+=10;draw()});
+ draw();
+}
+
+/* ---------- Quiz ---------- */
+const qa=$('#question');
+if(qa){
+ const Q=[
+  {q:'Qual ODS trata da Vida na Água?',o:['ODS 13','ODS 14','ODS 15','ODS 16'],c:1},
+  {q:'Qual ODS trata da Vida Terrestre?',o:['ODS 15','ODS 6','ODS 14','ODS 12'],c:0},
+  {q:'Qual é uma das principais ameaças ao mico-leão-dourado?',o:['Excesso de chuva','Fragmentação da Mata Atlântica','Falta de sol','Frio extremo'],c:1},
+  {q:'O que o tráfico de animais silvestres causa?',o:['Aumenta as populações','Ameaça espécies e causa sofrimento','Protege os habitats','Nada relevante'],c:1},
+  {q:'Qual ação ajuda a proteger a vida marinha?',o:['Usar mais descartáveis','Jogar lixo na praia','Reduzir o uso de plástico','Pescar em excesso'],c:2},
+  {q:'O tilacino (tigre-da-tasmânia) está em qual situação?',o:['Extinto','Estável','Em recuperação','Abundante'],c:0}
+ ];
+ let i=0,pts=0,locked=false;
+ const nxt=$('#nextQuestion');
+ const show=()=>{locked=false;$('#questionCount').textContent=`Pergunta ${i+1} de ${Q.length}`;qa.textContent=Q[i].q;
+  $('#quizFeedback').textContent='';nxt.hidden=true;const a=$('#answers');a.innerHTML='';
+  Q[i].o.forEach((t,k)=>{const b=document.createElement('button');b.className='answer';b.textContent=t;b.onclick=()=>pick(k,b);a.appendChild(b)})};
+ function pick(k,b){
+  if(locked)return;locked=true;const ok=k===Q[i].c;
+  $$('.answer').forEach((x,j)=>{x.disabled=true;if(j===Q[i].c)x.classList.add('right')});
+  if(ok)pts+=10;else b.classList.add('wrong');
+  $('#score').textContent=pts;$('#quizFeedback').textContent=ok?'Correto! +10 pontos':'Não foi dessa vez. A resposta certa está em verde.';
+  nxt.textContent=i===Q.length-1?'Ver resultado →':'Próxima pergunta →';nxt.hidden=false}
+ nxt.onclick=()=>{i++;if(i<Q.length)return show();
+  $('#quizArea').hidden=true;$('#gameResult').hidden=false;$('#finalScore').textContent=pts+' / '+Q.length*10;
+  const r=pts>=50?['Guardião da Vida','Excelente! Você conhece bem a conservação.']:pts>=30?['Protetor em formação','Bom resultado! Explore as espécies para aprender mais.']:['Explorador iniciante','Visite o catálogo de espécies e tente de novo.'];
+  $('#resultTitle').textContent=r[0];$('#resultText').textContent=r[1]};
+ $('#restartQuiz').onclick=()=>{i=0;pts=0;$('#score').textContent=0;$('#gameResult').hidden=true;$('#quizArea').hidden=false;show()};
+ show();
+}
+})();
+</script>
+</body>
 </html>

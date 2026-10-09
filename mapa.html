@@ -1,138 +1,226 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
-    <!-- Estrutura base e metadados da página de mapa -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="EcoGuard — Animais em extinção, ODS 14 e ODS 15." />
-    <title>EcoGuard | Mapa</title>
+    <title>EcoGuard | Mapa das espécies</title>
+    <meta name="description" content="Explore no mapa as regiões de 20 espécies marinhas e terrestres." />
 
-    <!-- Busca da fonte e estilos visuais -->
+    <!-- Fontes e estilos compartilhados com todas as páginas -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+    <!-- Ajustes exclusivos do mapa interativo -->
+    <link rel="stylesheet" href="style.css" />
+</head>
 
-  <body>
-    <!-- Barra de progresso da navegação -->
+  <body class="map-page">
+    <!-- Cabeçalho compartilhado: mantém a navegação igual às demais páginas -->
     <div class="progress" id="progress"></div>
-
-    <!-- Cabeçalho compartilhado em todas as páginas -->
     <header class="header" id="inicio">
-      <a class="logo" href="style.css" aria-label="EcoGuard - início">
+      <a class="logo" href="index.html" aria-label="EcoGuard - início">
         <span class="logo-mark">◉</span>
         <span>Eco<span>Guard</span></span>
       </a>
-
       <nav class="nav" aria-label="Navegação principal">
         <a href="index.html">Início</a>
         <a href="especies.html">Espécies</a>
-        <a href="mapa.html">Mapa</a>
+        <a href="mapa.html" class="active" aria-current="page">Mapa</a>
         <a href="jogo.html">Jogo</a>
         <a href="acoes.html">Ações</a>
       </nav>
-
       <div class="header-actions">
         <button class="icon-btn" id="themeToggle" aria-label="Alternar tema">☾</button>
         <button class="icon-btn" id="accessibilityToggle" aria-label="Abrir acessibilidade">♿</button>
         <button class="menu-btn" id="menuBtn" aria-label="Abrir menu">☰</button>
       </div>
     </header>
-
-    <!-- Painel de acessibilidade do portal -->
     <aside class="access-panel" id="accessPanel" aria-label="Opções de acessibilidade">
       <h3>Acessibilidade</h3>
       <button id="fontPlus">A+ Aumentar fonte</button>
       <button id="fontMinus">A− Diminuir fonte</button>
       <button id="contrastToggle">◐ Alto contraste</button>
-      <button id="readToggle">🔊 Ler conteúdo</button>
-      <button id="resetAccess">↺ Restaurar</button>
+      <button id="readToggle">Ler conteúdo</button>
+      <button id="resetAccess">Restaurar</button>
     </aside>
 
-    <main>
-      <!-- Hero introdutório do mapa interativo -->
-      <section class="page-hero">
-        <p class="eyebrow">EXPLORADOR DO PLANETA</p>
-        <h1>Onde essas espécies vivem?</h1>
-        <p>
-          Explore o globo interativo e selecione os marcadores para descobrir as regiões
-          associadas aos animais do projeto.
-        </p>
-      </section>
+    <div class="layout">
+      <!-- Área principal do globo interativo -->
+      <main class="stage" aria-label="Mapa interativo das espécies ameaçadas">
+        <div id="globeViz"></div>
+        <div class="loading" id="loading">Carregando o planeta 3D…</div>
 
-      <!-- Layout principal com globo e infomações ao lado -->
-      <section class="page-content">
-        <div class="map-layout">
-          <div class="globe-wrap">
-            <div class="globe-toolbar">
-              <span>🌍 ECO MAP</span>
-              <div>
-                <button id="zoomOut">−</button>
-                <button id="zoomIn">+</button>
-                <button id="resetGlobe">↺</button>
-              </div>
-            </div>
-
-            <div class="globe" id="globe" tabindex="0" aria-label="Globo interativo">
-              <div class="latitude lat-1"></div>
-              <div class="latitude lat-2"></div>
-              <div class="latitude lat-3"></div>
-              <div class="longitude lon-1"></div>
-              <div class="longitude lon-2"></div>
-              <div class="longitude lon-3"></div>
-              <div class="continent c1"></div>
-              <div class="continent c2"></div>
-              <div class="continent c3"></div>
-              <div class="continent c4"></div>
-              <div class="markers" id="markers"></div>
-            </div>
-
-            <p class="globe-tip">↔ Arraste para girar · scroll para zoom</p>
-          </div>
-
-          <aside class="map-info" id="mapInfo">
-            <div class="map-info-icon">🌍</div>
-            <p class="eyebrow">SELECIONE UM PONTO</p>
-            <h3>Explore o mapa</h3>
-            <p>Cada marcador representa uma espécie e uma região associada ao seu habitat.</p>
-
-            <div class="legend">
-              <span><i class="dot threatened"></i> Ameaçada</span>
-              <span><i class="dot critical"></i> Criticamente ameaçada</span>
-              <span><i class="dot extinct-dot"></i> Extinta</span>
-            </div>
-          </aside>
+        <!-- Legenda explicando a classificação das espécies -->
+        <div class="legend">
+          <h3>ODS do projeto</h3>
+          <p>🌊 ODS 14 — Vida na água</p>
+          <p>🌳 ODS 15 — Vida terrestre</p>
+          <hr style="border-color: #17374a" />
+          <h3>Situação das espécies</h3>
+          <p><i class="dot" style="background: #ff4356"></i>Criticamente ameaçada / extinta</p>
+          <p><i class="dot" style="background: #ffad36"></i>Ameaçada</p>
+          <p><i class="dot" style="background: #42d89a"></i>Vulnerável</p>
         </div>
-      </section>
 
-      <!-- Modal para mostrar detalhes do ponto selecionado -->
-      <dialog class="modal" id="animalModal">
-        <button class="modal-close" id="modalClose" aria-label="Fechar">×</button>
-        <div id="modalContent"></div>
-      </dialog>
-    </main>
+        <!-- Controles de zoom e navegação do globo -->
+        <div class="controls" aria-label="Controles do globo">
+          <button id="zoomIn" aria-label="Aumentar zoom">+</button>
+          <button id="zoomOut" aria-label="Diminuir zoom">−</button>
+          <button id="reset" aria-label="Centralizar globo">◎</button>
+        </div>
 
-    <!-- Rodapé principal do site -->
-    <footer class="footer">
-      <div>
-        <a class="logo" href="index.html">
-          <span class="logo-mark">◉</span>
-          <span>Eco<span>Guard</span></span>
-        </a>
-        <p>Animais em extinção: vidas em perigo.</p>
-      </div>
+        <div class="hint">↔ Arraste para girar · scroll para aproximar</div>
+      </main>
 
-      <div class="footer-meta">
-        <span>Projeto Integrador · Frontend</span>
-        <span>ODS 14 · ODS 15</span>
-      </div>
-    </footer>
+      <!-- Painel lateral com a lista de espécies -->
+      <aside class="side" aria-label="Lista de espécies no mapa">
+        <h2>Espécies no mapa <span style="color: #5ecff5">(20)</span></h2>
 
-    <!-- Script principal para manipular mapa, modal e acessibilidade -->
-    <script defer src="js/app.js"></script>
+        <div class="group-title" style="color: #55cfff">10 animais marinhos · ODS 14</div>
+        <div id="marineList"></div>
+
+        <div class="group-title" style="color: #62e7a5">10 animais terrestres · ODS 15</div>
+        <div id="landList"></div>
+
+        <div class="detail" id="detail">
+          <div class="pill">Selecione um marcador</div>
+          <h3>Explore o planeta</h3>
+          <p>
+            Clique em um animal na lista ou em seu marcador no globo para ver informações sobre sua região e ameaças.
+          </p>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Bibliotecas do globo 3D -->
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/globe.gl"></script>
+
+    <!-- Lógica do mapa mantida separada para facilitar manutenção -->
+    <script>
+/* EcoGuard — mapa 3D interativo.
+   Dados das 20 espécies, criação do globo, marcadores e controles. */
+const animals=[
+{id:1,name:'Baleia-azul',emoji:'🐋',type:'marinho',lat:25,lon:-45,status:'Ameaçada',color:'#ffad36',region:'Oceanos Atlântico, Pacífico e Índico',habitat:'Águas oceânicas profundas.',threat:'Colisões com navios, ruído submarino e mudanças ambientais.'},
+{id:2,name:'Tartaruga-verde',emoji:'🐢',type:'marinho',lat:-8,lon:-35,status:'Ameaçada',color:'#ffad36',region:'Águas tropicais e subtropicais',habitat:'Costas, recifes e pradarias marinhas.',threat:'Plástico, captura acidental e perda de praias de desova.'},
+{id:3,name:'Tubarão-martelo',emoji:'🦈',type:'marinho',lat:15,lon:-75,status:'Criticamente ameaçada',color:'#ff4356',region:'Mares tropicais e temperados',habitat:'Águas costeiras e oceânicas.',threat:'Sobrepesca e captura pelas barbatanas.'},
+{id:4,name:'Tubarão-branco',emoji:'🦈',type:'marinho',lat:-30,lon:30,status:'Vulnerável',color:'#42d89a',region:'Oceanos temperados',habitat:'Águas costeiras e oceânicas.',threat:'Pesca incidental e redução de presas.'},
+{id:5,name:'Raia-manta',emoji:'🐟',type:'marinho',lat:-12,lon:145,status:'Ameaçada',color:'#ffad36',region:'Indo-Pacífico e Atlântico tropical',habitat:'Águas tropicais próximas a recifes.',threat:'Pesca direcionada, captura acidental e poluição.'},
+{id:6,name:'Dugongo',emoji:'🦭',type:'marinho',lat:15,lon:115,status:'Vulnerável',color:'#42d89a',region:'Mar Vermelho e Indo-Pacífico',habitat:'Águas costeiras com pradarias marinhas.',threat:'Perda de pradarias, redes de pesca e colisões.'},
+{id:7,name:'Pinguim-de-Humboldt',emoji:'🐧',type:'marinho',lat:-25,lon:-78,status:'Vulnerável',color:'#42d89a',region:'Costas do Peru e do Chile',habitat:'Ilhas e costas rochosas frias.',threat:'Mudanças climáticas, pesca e perturbação das colônias.'},
+{id:8,name:'Baleia-franca',emoji:'🐋',type:'marinho',lat:-40,lon:-55,status:'Ameaçada',color:'#ffad36',region:'Atlântico Sul e outras águas do hemisfério sul',habitat:'Águas costeiras para reprodução.',threat:'Colisões com embarcações e emalhamento em redes.'},
+{id:9,name:'Vaquita',emoji:'🐬',type:'marinho',lat:31,lon:-114,status:'Criticamente ameaçada',color:'#ff4356',region:'Alto Golfo da Califórnia, México',habitat:'Águas rasas do golfo.',threat:'Captura acidental em redes de pesca ilegais.'},
+{id:10,name:'Tartaruga-de-pente',emoji:'🐢',type:'marinho',lat:18,lon:-66,status:'Criticamente ameaçada',color:'#ff4356',region:'Recifes tropicais do Caribe e Indo-Pacífico',habitat:'Recifes de coral e praias de nidificação.',threat:'Comércio ilegal do casco, perda de recifes e captura acidental.'},
+{id:11,name:'Onça-pintada',emoji:'🐆',type:'terrestre',lat:-5,lon:-60,status:'Ameaçada',color:'#ffad36',region:'América Central e América do Sul',habitat:'Florestas tropicais, Pantanal e outros ambientes.',threat:'Desmatamento, caça e conflitos com pecuaristas.'},
+{id:12,name:'Mico-leão-dourado',emoji:'🐒',type:'terrestre',lat:-22.5,lon:-42.5,status:'Ameaçada',color:'#ffad36',region:'Mata Atlântica do Rio de Janeiro, Brasil',habitat:'Florestas de baixada.',threat:'Fragmentação florestal e perda de habitat.'},
+{id:13,name:'Orangotango-de-Bornéu',emoji:'🦧',type:'terrestre',lat:1,lon:114,status:'Criticamente ameaçada',color:'#ff4356',region:'Ilha de Bornéu, Sudeste Asiático',habitat:'Florestas tropicais úmidas.',threat:'Desmatamento, incêndios e expansão agrícola.'},
+{id:14,name:'Elefante-africano',emoji:'🐘',type:'terrestre',lat:1,lon:25,status:'Ameaçada',color:'#ffad36',region:'África subsaariana',habitat:'Savanas, florestas e áreas de transição.',threat:'Perda de habitat e caça por marfim.'},
+{id:15,name:'Coala',emoji:'🐨',type:'terrestre',lat:-25,lon:153,status:'Ameaçada',color:'#ffad36',region:'Leste da Austrália',habitat:'Florestas de eucalipto.',threat:'Desmatamento, incêndios e ondas de calor.'},
+{id:16,name:'Rinoceronte-de-Java',emoji:'🦏',type:'terrestre',lat:-7,lon:105,status:'Criticamente ameaçada',color:'#ff4356',region:'Parque Nacional de Ujung Kulon, Indonésia',habitat:'Floresta tropical úmida.',threat:'População muito pequena e habitat restrito.'},
+{id:17,name:'Tigre-de-sumatra',emoji:'🐅',type:'terrestre',lat:-1,lon:102,status:'Criticamente ameaçada',color:'#ff4356',region:'Ilha de Sumatra, Indonésia',habitat:'Florestas tropicais.',threat:'Desmatamento, caça e fragmentação.'},
+{id:18,name:'Crocodilo-do-nilo',emoji:'🐊',type:'terrestre',lat:-2,lon:32,status:'Pouco preocupante',color:'#42d89a',region:'Rios e lagos da África subsaariana',habitat:'Rios, lagos e zonas úmidas.',threat:'Conflitos com pessoas e alterações de habitat em algumas áreas.'},
+{id:19,name:'Tilacino (extinto)',emoji:'🐺',type:'terrestre',lat:-42,lon:147,status:'Extinta',color:'#ff4356',region:'Tasmânia, Austrália',habitat:'Florestas e campos abertos.',threat:'Foi levado à extinção principalmente pela caça intensiva e outros impactos humanos.'},
+{id:20,name:'Urso-polar',emoji:'🐻‍❄️',type:'terrestre',lat:78,lon:-40,status:'Vulnerável',color:'#42d89a',region:'Região ártica',habitat:'Gelo marinho e costas do Ártico.',threat:'Aquecimento global e perda do gelo marinho.'}
+];
+// Corrige a longitude do coala, mantendo coordenadas numéricas válidas.
+animals.find(a=>a.id===15).lon=153;
+const list=(type)=>animals.filter(a=>a.type===type).map(a=>`<button class="animal ${type==='terrestre'?'terra':''}" data-id="${a.id}"><span class="num">${a.id}.</span><span class="ico">${a.emoji}</span><span class="name">${a.name}</span><i class="status" style="background:${a.color}"></i></button>`).join('');
+document.getElementById('marineList').innerHTML=list('marinho');document.getElementById('landList').innerHTML=list('terrestre');
+function show(a){document.querySelectorAll('.animal').forEach(b=>b.classList.toggle('active',+b.dataset.id===a.id));document.getElementById('detail').innerHTML=`<div class="pill">ODS ${a.type==='marinho'?'14 · Vida na água':'15 · Vida terrestre'}</div><h3>${a.emoji} ${a.name}</h3><p><b>Situação:</b> ${a.status}</p><p><b>Região:</b> ${a.region}</p><p><b>Habitat:</b> ${a.habitat}</p><p><b>Ameaças:</b> ${a.threat}</p>`;if(window.earthGlobe)earthGlobe.pointOfView({lat:a.lat,lng:a.lon,altitude:1.5},900)}
+document.querySelectorAll('.animal').forEach(b=>b.addEventListener('click',()=>show(animals.find(a=>a.id===+b.dataset.id))));
+if(typeof Globe==='function'){try{window.earthGlobe=Globe()(document.getElementById('globeViz')).globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg').bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png').backgroundImageUrl('https://unpkg.com/three-globe/example/img/night-sky.png').showAtmosphere(true).atmosphereColor('#4ab8ff').atmosphereAltitude(.18).pointsData(animals).pointLat('lat').pointLng('lon').pointColor('color').pointRadius(.48).pointAltitude(.018).pointLabel(a=>`<div style="background:#041827;border:1px solid #27769b;border-radius:8px;padding:8px;color:white"><b>${a.emoji} ${a.name}</b><br>${a.region}<br><small>${a.status}</small></div>`).onPointClick(show).htmlElementsData(animals).htmlLat('lat').htmlLng('lon').htmlAltitude(.035).htmlElement(a=>{const e=document.createElement('div');e.textContent=a.emoji;e.style.cssText=`font-size:18px;background:#06243bdc;border:2px solid ${a.color};border-radius:50%;width:34px;height:34px;display:grid;place-items:center;box-shadow:0 0 14px ${a.color}66;cursor:pointer;`;e.title=a.name;e.onclick=()=>show(a);return e;});document.getElementById('loading').style.display='none';document.getElementById('zoomIn').onclick=()=>earthGlobe.pointOfView({altitude:Math.max(.8,earthGlobe.pointOfView().altitude*.8)},500);document.getElementById('zoomOut').onclick=()=>earthGlobe.pointOfView({altitude:Math.min(4,earthGlobe.pointOfView().altitude*1.25)},500);document.getElementById('reset').onclick=()=>earthGlobe.pointOfView({lat:15,lng:-25,altitude:2.1},900);earthGlobe.pointOfView({lat:15,lng:-25,altitude:2.1});}catch(error){console.error('Falha ao inicializar o globo:',error);document.getElementById('loading').textContent='O mapa não carregou. Atualize a página e verifique sua conexão.'}}else{document.getElementById('loading').textContent='O mapa 3D não carregou. Verifique sua conexão com a internet e atualize a página.'}
+
+
+/* ---------- Recursos compartilhados do site: tema, menu e acessibilidade ---------- */
+(function configurarInterfaceCompartilhada() {
+  const $ = (seletor) => document.querySelector(seletor);
+  const root = document.documentElement;
+  const armazenamento = {
+    get(chave, padrao) {
+      try { return localStorage.getItem(chave) ?? padrao; } catch (_) { return padrao; }
+    },
+    set(chave, valor) {
+      try { localStorage.setItem(chave, valor); } catch (_) {}
+    }
+  };
+
+  // Usa a mesma preferência de tema salva nas outras páginas.
+  const botaoTema = $('#themeToggle');
+  function aplicarTema(tema) {
+    root.setAttribute('data-theme', tema);
+    if (botaoTema) botaoTema.textContent = tema === 'dark' ? '☀' : '☾';
+    armazenamento.set('eg-theme', tema);
+  }
+  aplicarTema(armazenamento.get(
+    'eg-theme',
+    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  ));
+  if (botaoTema) {
+    botaoTema.addEventListener('click', () => {
+      aplicarTema(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    });
+  }
+
+  // Menu responsivo.
+  const botaoMenu = $('#menuBtn');
+  const navegacao = $('.nav');
+  if (botaoMenu && navegacao) {
+    botaoMenu.addEventListener('click', () => navegacao.classList.toggle('open'));
+  }
+
+  // Painel de acessibilidade e tamanho de fonte.
+  const painel = $('#accessPanel');
+  const botaoAcessibilidade = $('#accessibilityToggle');
+  if (painel && botaoAcessibilidade) {
+    botaoAcessibilidade.addEventListener('click', () => painel.classList.toggle('open'));
+  }
+  let tamanhoFonte = Number(armazenamento.get('eg-fs', 16));
+  function aplicarFonte() {
+    tamanhoFonte = Math.max(12, Math.min(24, tamanhoFonte));
+    root.style.setProperty('--fs', tamanhoFonte + 'px');
+    armazenamento.set('eg-fs', tamanhoFonte);
+  }
+  aplicarFonte();
+  const aoClicar = (id, funcao) => { const elemento = $(id); if (elemento) elemento.addEventListener('click', funcao); };
+  aoClicar('#fontPlus', () => { tamanhoFonte += 2; aplicarFonte(); });
+  aoClicar('#fontMinus', () => { tamanhoFonte -= 2; aplicarFonte(); });
+  if (armazenamento.get('eg-hc', '0') === '1') root.classList.add('hc');
+  aoClicar('#contrastToggle', () => {
+    armazenamento.set('eg-hc', root.classList.toggle('hc') ? '1' : '0');
+  });
+  aoClicar('#readToggle', () => {
+    if (!('speechSynthesis' in window)) {
+      alert('Seu navegador não suporta leitura em voz alta.');
+      return;
+    }
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      return;
+    }
+    const conteudo = $('main');
+    const fala = new SpeechSynthesisUtterance(conteudo ? conteudo.innerText : document.body.innerText);
+    fala.lang = 'pt-BR';
+    window.speechSynthesis.speak(fala);
+  });
+  aoClicar('#resetAccess', () => {
+    tamanhoFonte = 16;
+    aplicarFonte();
+    root.classList.remove('hc');
+    armazenamento.set('eg-hc', '0');
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+  });
+
+  // Atualiza a barra de progresso sem interferir no globo.
+  const progresso = $('#progress');
+  function atualizarProgresso() {
+    if (!progresso) return;
+    const altura = document.documentElement.scrollHeight - window.innerHeight;
+    progresso.style.width = (altura > 0 ? window.scrollY / altura * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', atualizarProgresso, { passive: true });
+  atualizarProgresso();
+})();
+</script>
   </body>
 </html>
+

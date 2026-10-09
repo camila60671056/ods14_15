@@ -1,0 +1,13 @@
+ECOGUARD — COMO ABRIR
+
+1. Extraia todos os arquivos do ZIP para uma pasta.
+2. Abra o arquivo index.html no navegador.
+3. Use o menu para navegar entre Início, Espécies, Mapa, Jogo e Ações.
+
+ORGANIZAÇÃO DOS CÓDIGOS
+- Cada página tem seu próprio arquivo HTML.
+- Todos os estilos CSS estão reunidos no arquivo style.css.
+- O JavaScript de cada página está dentro do respectivo HTML.
+- O mapa 3D usa bibliotecas externas carregadas pela internet; mantenha a conexão ativa para que o globo e os marcadores apareçam.
+
+Observação: as páginas e funcionalidades existentes foram preservadas; esta alteração reorganiza onde ficam os códigos CSS e JavaScript.
